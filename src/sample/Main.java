@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-
 public class Main   extends Application   {
     BorderPane bp = new BorderPane();
     @Override
@@ -60,36 +57,24 @@ public class Main   extends Application   {
                 }
             }
         gp.setAlignment(Pos.CENTER);
-
-        //int end = (int) Math.ceil(Math.sqrt(n + 1));
-        ArrayList<Integer> ans = new ArrayList<>();
-        for (int i = 2; i <= n; i++) {
-                    if (!notPrime[i]) {
-                        ans.add(i);
-                        arr[i].setStyle("-fx-background-color : greenyellow; -fx-border-color : deepskyblue; -fx-border-width: 5");
-                        for (int j = i * i; j <= n; j += i) {
-                            notPrime[j] = true;
-                            arr[j].setStyle("-fx-background-color : orangered; -fx-border-color : black");
-                            final long INTERVAL = 1000000000; // 1 sec
-                            long start = System.nanoTime();
-                            long end=0;
-                            do{
-                                end = System.nanoTime();
-                            }while(start + INTERVAL >= end);
-                        }
-                        arr[i].setStyle("-fx-background-color : greenyellow; -fx-border-color : black");
-                    }
+        int end = (int) Math.ceil(Math.sqrt(n + 1));
+new Thread(()->{
+    for (int i = 2; i <= end; i++) {
+        if (!notPrime[i]) {
+            arr[i].setStyle("-fx-background-color : greenyellow; -fx-border-color : deepskyblue; -fx-border-width: 5");
+            for (int j = i * i; j <= n; j += i) {
+                notPrime[j] = true;
+                arr[j].setStyle("-fx-background-color : orangered; -fx-border-color : black");
+                try {Thread.sleep(120);}
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-        Label ansl = new Label("Prime Numbers : " + ans);
-        ansl.setStyle(" -fx-font-size: 16; -fx-font-weight: bold");
-        HBox hb = new HBox(ansl);
-        hb.setAlignment(Pos.CENTER);
-        hb.setPadding(new Insets(0, 0, 20, 0));
-        bp.setBottom(hb);
+            }
+            arr[i].setStyle("-fx-background-color : greenyellow; -fx-border-color : black");
+        }
+    }
+}).start();
         bp.setCenter(gp);
-
-
-
     }
 
 
